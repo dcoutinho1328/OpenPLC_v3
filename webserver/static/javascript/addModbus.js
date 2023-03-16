@@ -1,26 +1,26 @@
 var parityTypes = [
   {
-    "id": 1,
-    "value": "none",
-    "text": "None"
+    id: 1,
+    value: "none",
+    text: "None",
   },
   {
-    "id": 2,
-    "value": "even",
-    "text": "Even"
+    id: 2,
+    value: "even",
+    text: "Even",
   },
   {
-    "id": 3,
-    "value": "odd",
-    "text": "Odd"
-  }
-]
+    id: 3,
+    value: "odd",
+    text: "Odd",
+  },
+];
 
-var deviceTypes = []
+var deviceTypes = [];
 
 function getParityValue(id) {
-  var parity = parityTypes.find(p => p.id === id)
-  return parity? parity.value: parityTypes[0].value
+  var parity = parityTypes.find((p) => p.id === id);
+  return parity ? parity.value : parityTypes[0].value;
 }
 
 function populateDropdown() {
@@ -31,14 +31,14 @@ function populateDropdown() {
       return response.json();
     })
     .then((jsondata) => {
-      var selectedType = "rtu"
-      var selected = "generic_rtu"
-      jsondata.forEach(e => {
+      var selectedType = "rtu";
+      var selected = "generic_rtu";
+      jsondata.forEach((e) => {
         if (e.isSelected) {
-          selectedType = e.type
-          selected = e.value
+          selectedType = e.type;
+          selected = e.value;
         }
-      })
+      });
       switch (selectedType) {
         case "rtu":
           populateCOM();
@@ -58,7 +58,7 @@ function populateDropdown() {
       var rtu = document.createElement("optgroup");
       rtu.label = "RTU";
       for (let hardware of jsondata) {
-        deviceTypes.push(hardware)
+        deviceTypes.push(hardware);
         var option = document.createElement("option");
         option.value = hardware.value;
         option.selected = hardware.isSelected;
@@ -71,19 +71,18 @@ function populateDropdown() {
       }
       e.appendChild(rtu);
       e.appendChild(tcp);
-      refreshSelector()
+      refreshSelector();
     });
 }
 
 async function getDevice(value) {
-  var type = deviceTypes.find(i => i.value === value)
-  if(!type) {
-    type = await fetch(`/modbus/deviceTypes/${value}`)
-    .then((response) => {
+  var type = deviceTypes.find((i) => i.value === value);
+  if (!type) {
+    type = await fetch(`/modbus/deviceTypes/${value}`).then((response) => {
       return response.json();
-    })
+    });
   }
-  return type || null
+  return type || null;
 }
 
 function populateCOM() {
@@ -104,13 +103,13 @@ function populateCOM() {
 }
 
 function populateParity() {
-  var e = document.getElementById("dev_parity")
-  e.innerHTML = ''
+  var e = document.getElementById("dev_parity");
+  e.innerHTML = "";
   for (let p of parityTypes) {
     var option = document.createElement("option");
-        option.value = p.value;
-        option.innerHTML = p.text;
-        e.appendChild(option)
+    option.value = p.value;
+    option.innerHTML = p.text;
+    e.appendChild(option);
   }
 }
 
@@ -119,7 +118,7 @@ async function refreshSelector() {
   var selected = [...drop_down.options].find((o) => o.selected);
   var tcp_stuff = document.getElementById("tcp-stuff");
   var rtu_stuff = document.getElementById("rtu-stuff");
-  setupPageContent(selected.value)
+  setupPageContent(selected.value);
 }
 
 window.onload = async function () {
@@ -187,7 +186,7 @@ async function setupPageContent(value) {
     rtudiv.style.display = "none";
 
     tcpdiv.style.display = "none";
-      rtudiv.style.display = "block";
+    rtudiv.style.display = "block";
 
     turnElementOn(devid);
     turnElementOn(devbaud);
@@ -247,41 +246,40 @@ async function setupPageContent(value) {
     tcpdiv.style.display = "none";
     rtudiv.style.display = "block";
 
-      turnElementOff(devid);
-      devid.value = item.slaveId;
-      turnElementOff(devbaud);
-      devbaud.value = item.baudRate;
-      turnElementOff(devparity);
-      devparity.value = getParityValue(item.parity);
-      turnElementOff(devdata);
-      devdata.value = item.dataBits;
-      turnElementOff(devstop);
-      devstop.value = item.stopBits;
-      turnElementOff(devpause);
-      devpause.value = item.transmissionPause;
-    }
-
-    turnElementOff(distart);
-      distart.value = item.discreteInputs.startAddress;
-      turnElementOff(disize);
-      disize.value = item.discreteInputs.size;
-      turnElementOff(dostart);
-      dostart.value = item.coils.startAddress;
-      turnElementOff(dosize);
-      dosize.value = item.coils.size;;
-      turnElementOff(aistart);
-      aistart.value = item.inputRegisters.startAddress;
-      turnElementOff(aisize);
-      aisize.value = item.inputRegisters.size;;
-      turnElementOff(aorstart);
-      aorstart.value = item.holdingRegistersRead.startAddress;
-      turnElementOff(aorsize);
-      aorsize.value = item.holdingRegistersRead.size;;
-      turnElementOff(aowstart);
-      aowstart.value = item.holdingRegistersWrite.startAddress;
-      turnElementOff(aowsize);
-      aowsize.value = item.holdingRegistersWrite.size;
+    turnElementOff(devid);
+    devid.value = item.slaveId;
+    turnElementOff(devbaud);
+    devbaud.value = item.baudRate;
+    turnElementOff(devparity);
+    devparity.value = getParityValue(item.parity);
+    turnElementOff(devdata);
+    devdata.value = item.dataBits;
+    turnElementOff(devstop);
+    devstop.value = item.stopBits;
+    turnElementOff(devpause);
+    devpause.value = item.transmissionPause;
   }
+
+  turnElementOff(distart);
+  distart.value = item.discreteInputs.startAddress;
+  turnElementOff(disize);
+  disize.value = item.discreteInputs.size;
+  turnElementOff(dostart);
+  dostart.value = item.coils.startAddress;
+  turnElementOff(dosize);
+  dosize.value = item.coils.size;
+  turnElementOff(aistart);
+  aistart.value = item.inputRegisters.startAddress;
+  turnElementOff(aisize);
+  aisize.value = item.inputRegisters.size;
+  turnElementOff(aorstart);
+  aorstart.value = item.holdingRegistersRead.startAddress;
+  turnElementOff(aorsize);
+  aorsize.value = item.holdingRegistersRead.size;
+  turnElementOff(aowstart);
+  aowstart.value = item.holdingRegistersWrite.startAddress;
+  turnElementOff(aowsize);
+  aowsize.value = item.holdingRegistersWrite.size;
 }
 
 function validateForm() {
