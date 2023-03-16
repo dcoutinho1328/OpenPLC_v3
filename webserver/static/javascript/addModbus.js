@@ -41,22 +41,22 @@ function populateDropdown() {
       })
       switch (selectedType) {
         case "rtu":
-          populateCOM()
-          tcp_stuff.style.display = "none"
-          rtu_stuff.style.display = "block"
-          break
+          populateCOM();
+          tcp_stuff.style.display = "none";
+          rtu_stuff.style.display = "block";
+          break;
         case "tcp":
-          tcp_stuff.style.display = "block"
-          rtu_stuff.style.display = "none"
-          break
+          tcp_stuff.style.display = "block";
+          rtu_stuff.style.display = "none";
+          break;
         default:
-          break
+          break;
       }
       var e = document.getElementById("dev_protocol");
-      var tcp = document.createElement("optgroup")
-      tcp.label = "TCP"
-      var rtu = document.createElement("optgroup")
-      rtu.label = "RTU"
+      var tcp = document.createElement("optgroup");
+      tcp.label = "TCP";
+      var rtu = document.createElement("optgroup");
+      rtu.label = "RTU";
       for (let hardware of jsondata) {
         deviceTypes.push(hardware)
         var option = document.createElement("option");
@@ -64,9 +64,9 @@ function populateDropdown() {
         option.selected = hardware.isSelected;
         option.innerHTML = hardware.label;
         if (hardware.type === "tcp") {
-          tcp.appendChild(option)
+          tcp.appendChild(option);
         } else {
-          rtu.appendChild(option)
+          rtu.appendChild(option);
         }
       }
       e.appendChild(rtu);
@@ -93,12 +93,12 @@ function populateCOM() {
     })
     .then((jsondata) => {
       var e = document.getElementById("dev_cport");
-      e.innerHTML = ''
+      e.innerHTML = "";
       for (let port of jsondata) {
         var option = document.createElement("option");
         option.value = port.toLowerCase();
         option.innerHTML = port;
-        e.appendChild(option)
+        e.appendChild(option);
       }
     });
 }
@@ -116,7 +116,7 @@ function populateParity() {
 
 async function refreshSelector() {
   var drop_down = document.getElementById("dev_protocol");
-  var selected = [...drop_down.options].find(o => o.selected);
+  var selected = [...drop_down.options].find((o) => o.selected);
   var tcp_stuff = document.getElementById("tcp-stuff");
   var rtu_stuff = document.getElementById("rtu-stuff");
   setupPageContent(selected.value)
@@ -189,42 +189,63 @@ async function setupPageContent(value) {
     tcpdiv.style.display = "none";
       rtudiv.style.display = "block";
 
-      turnElementOn(devid);
-      turnElementOn(devbaud);
-      turnElementOn(devparity);
-      devparity.value = parityTypes[0].value;
-      turnElementOn(devdata);
-      turnElementOn(devstop);
-      turnElementOn(devpause);
-      devpause.value = "0";
-      turnElementOn(distart);
-      turnElementOn(disize);
-      turnElementOn(dostart);
-      turnElementOn(dosize);
-      turnElementOn(aistart);
-      turnElementOn(aisize);
-      turnElementOn(aorstart);
-      turnElementOn(aorsize);
-      turnElementOn(aowstart);
-      turnElementOn(aowsize);
-  } else {
-    var item = await getDevice(value)
+    turnElementOn(devid);
+    turnElementOn(devbaud);
+    turnElementOn(devparity);
+    devparity.value = "None";
+    turnElementOn(devdata);
+    turnElementOn(devstop);
+    turnElementOn(devpause);
+    devpause.value = "0";
+    turnElementOn(distart);
+    turnElementOn(disize);
+    turnElementOn(dostart);
+    turnElementOn(dosize);
+    turnElementOn(aistart);
+    turnElementOn(aisize);
+    turnElementOn(aorstart);
+    turnElementOn(aorsize);
+    turnElementOn(aowstart);
+    turnElementOn(aowsize);
+  } else if (dropmenu.options[dropmenu.selectedIndex].value == "Uno") {
+    tcpdiv.style.display = "none";
+    rtudiv.style.display = "block";
 
-    if (!item) {
-      popError("Could not find device information")
-    }
-
-    if (item.type == "tcp") {
-      tcpdiv.style.display = "block";
-      rtudiv.style.display = "none";
-
-      turnElementOff(devport);
-      devport.value = item.ipPort;
-      turnElementOff(devid);
-      devid.value = item.slaveId;
-    } else if (item.type == "rtu") {
-      tcpdiv.style.display = "none";
-      rtudiv.style.display = "block";
+    turnElementOff(devid);
+    devid.value = "0";
+    turnElementOff(devbaud);
+    devbaud.value = "115200";
+    turnElementOff(devparity);
+    devparity.value = "None";
+    turnElementOff(devdata);
+    devdata.value = "8";
+    turnElementOff(devstop);
+    devstop.value = "1";
+    turnElementOff(devpause);
+    devpause.value = "0";
+    turnElementOff(distart);
+    distart.value = "0";
+    turnElementOff(disize);
+    disize.value = "5";
+    turnElementOff(dostart);
+    dostart.value = "0";
+    turnElementOff(dosize);
+    dosize.value = "4";
+    turnElementOff(aistart);
+    aistart.value = "0";
+    turnElementOff(aisize);
+    aisize.value = "6";
+    turnElementOff(aorstart);
+    aorstart.value = "0";
+    turnElementOff(aorsize);
+    aorsize.value = "0";
+    turnElementOff(aowstart);
+    aowstart.value = "0";
+    turnElementOff(aowsize);
+    aowsize.value = "3";
+  } else if (dropmenu.options[dropmenu.selectedIndex].value == "Mega") {
+    tcpdiv.style.display = "none";
+    rtudiv.style.display = "block";
 
       turnElementOff(devid);
       devid.value = item.slaveId;

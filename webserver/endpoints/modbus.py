@@ -24,6 +24,7 @@ def addDevice():
 def editDevice():
     return send_file("static/html/modbus/editDevice/editModbusDevice.html")
 
+
 @blueprint.route("/modbus/deviceTypes", methods=["GET", "POST"])
 @blueprint.route("/modbus/deviceTypes/<value>", methods=["GET", "POST"])
 @login_required
@@ -38,6 +39,7 @@ def deviceTypes(value=None):
                 return ("Device not found", 404)
     return send_file("static/json/deviceTypes.json")
 
+
 @blueprint.route("/modbus/comPorts", methods=["GET", "POST"])
 @login_required
 def comPorts():
@@ -45,10 +47,9 @@ def comPorts():
     portNames = []
     for port in ports:
         portNames.append(port)
-    if (platform.system().startswith("CYGWIN")):
-        portNames = list(map(lambda x: "COM" + str(int(x.split("/dev/ttyS")[1]) + 1), portNames))
+    if platform.system().startswith("CYGWIN"):
+        portNames = list(
+            map(lambda x: "COM" + str(int(x.split("/dev/ttyS")[1]) + 1), portNames)
+        )
 
     return json.dumps(portNames)
-
-
-    
